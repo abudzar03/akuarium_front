@@ -1,96 +1,143 @@
 import React from 'react';
-import Container from '@material-ui/core/Container';
-import Typography from '@material-ui/core/Typography';
+import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import TextField from '@material-ui/core/TextField';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
+import Link from '@material-ui/core/Link';
+import Paper from '@material-ui/core/Paper';
 import Box from '@material-ui/core/Box';
-import ProTip from '../src/ProTip';
-import Link from '../src/Link';
-import Copyright from '../src/Copyright';
-import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import Card from '@material-ui/core/Card';
-import CardMedia from '@material-ui/core/CardMedia';
-import CardContent from '@material-ui/core/CardContent';
-import { Button, TextField } from '@material-ui/core';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
 import Head from 'next/head';
 
-const useStyles = makeStyles({
+function Copyright() {
+  return (
+    <Typography variant="body2" color="textSecondary" align="center">
+      {'Copyright © '}
+      <Link color="inherit" href="https://material-ui.com/">
+        Your Website
+      </Link>{' '}
+      {new Date().getFullYear()}
+      {'.'}
+    </Typography>
+  );
+}
+
+const useStyles = makeStyles((theme) => ({
   root: {
-    minHeight: "100vh",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center"
+    height: '100vh',
   },
-  media: {
-    height: "30vh",
+  image: {
+    backgroundImage: 'url(/img/akuarium-head.png)',
+    backgroundRepeat: 'no-repeat',
+    backgroundColor:
+      theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
   },
-  title: {
-    textAlign: "center",
+  paper: {
+    margin: theme.spacing(8, 4),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  avatar: {
+    margin: theme.spacing(1),
+    width: theme.spacing(10),
+    height: theme.spacing(10),
   },
   form: {
-    marginTop: "25px",
+    width: '100%', // Fix IE 11 issue.
+    marginTop: theme.spacing(1),
   },
-  field: {
-    marginTop: "10px",
-    justifyContent: "center",
+  submit: {
+    margin: theme.spacing(3, 0, 2),
   },
-  button: {
-    textAlign: "center",
-  }
-});
+}));
 
-export default function Index() {
+export default function SignInSide() {
   const classes = useStyles();
 
   return (
-    <>
-    <Head>
-      <title>AKUARIUM - Login</title>
-      <link rel="icon" href="/img/favicon.ico" />
-    </Head>
-    <Container className={classes.root}>
-      <Grid container>
-        <Grid item xs={12}>
-          <Card>
-            <CardMedia className={classes.media}
-              image="/img/akuarium-head.png"
+    <Grid container component="main" className={classes.root}>
+      <Head>
+        <title>AKUARIUM - Login</title>
+        <link rel="icon" href="/img/favicon.ico" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+        <link href="https://fonts.googleapis.com/css2?family=Overpass&family=Raleway&display=swap" rel="stylesheet" />
+      </Head>
+      <CssBaseline />
+      <Grid item xs={false} sm={4} md={7} className={classes.image} />
+      <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+        <div className={classes.paper}>
+          <Avatar src="/img/beta-red.png" className={classes.avatar}>
+            
+          </Avatar>
+          <Typography component="h1" variant="h5" style={{fontFamily: "raleway"}}>
+            Selamat Datang di
+          </Typography>
+          <Typography component="h1" variant="h4" style={{fontFamily: "raleway"}}>
+            AKUARIUM
+          </Typography>
+          <form className={classes.form}>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="username"
+              label="Username"
+              name="username"
+              InputLabelProps={{style:{fontFamily: "overpass"}}}
+              inputProps={{style:{fontFamily: "overpass"}}}
+              autoFocus
             />
-            <CardContent>
-              <Typography variant="h4" color="primary" className={classes.title}>
-                Selamat datang di AKUARIUM
-              </Typography>
-              <form className={classes.form}>
-                <Grid container className={classes.field}>
-                  <Grid item xs={12} sm={4}>
-                      <TextField required id="nik" label="NIK" fullWidth></TextField>
-                  </Grid>
-                </Grid>
-                <Grid container className={classes.field}>
-                  <Grid item xs={12} sm={4}>
-                      <TextField required id="password" label="Password" fullWidth></TextField>
-                  </Grid>
-                </Grid>
-                <Grid container className={classes.field}>
-                  <Grid item xs={12} sm={2} className={classes.button}>
-                    <Button size="large">LOGIN</Button>
-                  </Grid>
-                  <Grid item xs={12} sm={2} className={classes.button}>
-                    <Link href="/register" passHref style={{ textDecoration: 'none' }}>
-                      <Button size="large" color="secondary" type="button">Register</Button>
-                    </Link>
-                  </Grid>
-                </Grid>
-              </form>
-            </CardContent>
-          </Card>
-        </Grid>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              InputLabelProps={{style:{fontFamily: "overpass"}}}
+              inputProps={{style:{fontFamily: "overpass"}}}
+            />
+            {/* <FormControlLabel
+              control={<Checkbox value="remember" color="primary" />}
+              label="Remember me"
+            /> */}
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+            >
+              LOGIN
+            </Button>
+            <Grid container>
+              <Grid item xs>
+                {/* <Link href="#" variant="body2">
+                  Forgot password?
+                </Link> */}
+              </Grid>
+              <Grid item>
+                <Link href="/register" variant="body2">
+                  {"Belum punya akun? Daftar dulu"}
+                </Link>
+              </Grid>
+            </Grid>
+            <Box mt={5}>
+              {/* <Copyright /> */}
+            </Box>
+          </form>
+        </div>
       </Grid>
-      {/* <Link href="/about" color="secondary">
-        Go to the about page
-      </Link> */}
-      {/* <ProTip /> */}
-      {/* <Copyright /> */}
-    </Container>
-    </>
+    </Grid>
   );
 }
