@@ -58,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SignInSide() {
+export default function Index() {
   const classes = useStyles();
 
   return (
@@ -128,7 +128,7 @@ export default function SignInSide() {
               </Grid>
               <Grid item>
                 <Link href="/register" variant="body2">
-                  {"Belum punya akun? Daftar dulu"}
+                  {"Belum punya akun? Daftar dulu!"}
                 </Link>
               </Grid>
             </Grid>

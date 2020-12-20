@@ -12,19 +12,24 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Head from 'next/head';
+import { useState } from 'react';
+import { useForm } from "react-hook-form";
+import Modal from '@material-ui/core/Modal';
+import Backdrop from '@material-ui/core/Backdrop';
+import Fade from '@material-ui/core/Fade';
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+// function Copyright() {
+//   return (
+//     <Typography variant="body2" color="textSecondary" align="center">
+//       {'Copyright © '}
+//       <Link color="inherit" href="https://material-ui.com/">
+//         Your Website
+//       </Link>{' '}
+//       {new Date().getFullYear()}
+//       {'.'}
+//     </Typography>
+//   );
+// }
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -56,10 +61,107 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  modal: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  paperModal: {
+    backgroundColor: theme.palette.background.paper,
+    border: '2px solid #000',
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+  },
 }));
 
 export default function SignInSide() {
   const classes = useStyles();
+
+  const [username, setUsername]  = useState("");
+  const [password, setPassword]  = useState("");
+  const [firstname, setFirstname]  = useState("");
+  const [surname, setSurname]  = useState("");
+
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const [open2, setOpen2] = useState(false);
+  const handleOpen2 = () => {
+    setOpen2(true);
+  };
+  const handleClose2 = () => {
+    setOpen2(false);
+  };
+
+  const axios = require('axios');
+  axios.defaults.baseURL = 'http://localhost:4000';
+  const { register, handleSubmit } = useForm();
+  const onSubmit = data => {
+    console.log(data);
+    axios.post('/users/signup', {
+      username : username,
+      password : password,
+      firstname : firstname,
+      lastname : surname,
+    })
+    .then(function (response) {
+      // console.log(response);
+      if (response.data.success) {
+        handleOpen();
+      }
+    })
+    .catch(function (error) {
+      console.log(error);
+      handleOpen2();
+    });
+  } 
+
+  // const register = async (e) => {
+  //   e.preventDefault() // prevents page reload
+    // axios.post('/users/signup', {
+    //   username : username,
+    //   password : password,
+    //   firstname : firstname,
+    //   lastname : surname,
+    // })
+    // .then(function (response) {
+    //   // console.log(response);
+    //   if (response.data.success) {
+        
+    //   }
+    // })
+    // .catch(function (error) {
+    //   console.log(error);
+    // });
+    // try {
+    //   const res = await fetch('http://localhost:4000/users/signup', {
+    //     method: 'post',
+    //     headers: {
+    //       'Content-Type': 'text/json'
+    //     },
+    //     body: JSON.stringify({
+    //       username : username,
+    //       password : password,
+    //       firstname : firstname,
+    //       lastname : surname,
+    //     })
+    //   })
+
+    //   if (res.status === 200) {
+    //     alert('You are subscribed!')
+    //   } else {
+    //     console.log(res)
+    //     alert('Sorry, something went wrong.')
+    //   }
+    // } catch(err) {
+    //   console.log(err) 
+    //   alert('Sorry, something went wrong.')
+    //  }
+  // }
 
   return (
     <Grid container component="main" className={classes.root}>
@@ -82,7 +184,7 @@ export default function SignInSide() {
           <Typography component="h1" variant="h4" style={{fontFamily: "raleway"}}>
             AKUARIUM
           </Typography>
-          <form className={classes.form}>
+          <form className={classes.form} onSubmit={handleSubmit(onSubmit)}>
             <TextField
               variant="outlined"
               margin="normal"
@@ -93,7 +195,9 @@ export default function SignInSide() {
               name="username"
               InputLabelProps={{style:{fontFamily: "overpass"}}}
               inputProps={{style:{fontFamily: "overpass"}}}
-              autoFocus
+              value={username}
+              onChange={e => setUsername(e.target.value)}
+              inputRef={register({ required: true})}
             />
             <TextField
               variant="outlined"
@@ -106,17 +210,23 @@ export default function SignInSide() {
               id="password"
               InputLabelProps={{style:{fontFamily: "overpass"}}}
               inputProps={{style:{fontFamily: "overpass"}}}
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              inputRef={register({ required: true})}
             />
             <TextField
               variant="outlined"
               margin="normal"
               required
               fullWidth
-              name="surname"
+              name="firstname"
               label="Nama Depan"
-              id="surname"
+              id="firstname"
               InputLabelProps={{style:{fontFamily: "overpass"}}}
               inputProps={{style:{fontFamily: "overpass"}}}
+              value={firstname}
+              onChange={e => setFirstname(e.target.value)}
+              inputRef={register({ required: true})}
             />
             <TextField
               variant="outlined"
@@ -128,6 +238,9 @@ export default function SignInSide() {
               id="lastname"
               InputLabelProps={{style:{fontFamily: "overpass"}}}
               inputProps={{style:{fontFamily: "overpass"}}}
+              value={surname}
+              onChange={e => setSurname(e.target.value)}
+              inputRef={register({ required: true})}
             />
             {/* <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
@@ -139,6 +252,7 @@ export default function SignInSide() {
               variant="contained"
               color="primary"
               className={classes.submit}
+              // onClick={register}
             >
               Register
             </Button>
@@ -150,7 +264,7 @@ export default function SignInSide() {
               </Grid>
               <Grid item>
                 <Link href="/" variant="body2">
-                  {"Sudah punya akun? Kuy login"}
+                  {"Sudah punya akun? Kuy login!"}
                 </Link>
               </Grid>
             </Grid>
@@ -160,6 +274,48 @@ export default function SignInSide() {
           </form>
         </div>
       </Grid>
+
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={open}
+        onClose={handleClose}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={open}>
+          <div className={classes.paperModal}>
+            <h2 id="transition-modal-title" style={{textAlign: "center"}}>Terima kasih telah menjadi bagian dari AKUARIUM</h2>
+            <Link href="/">
+              <p id="transition-modal-description" style={{textAlign: "center"}}>Klik di sini untuk menuju halaman login</p>
+            </Link>
+          </div>
+        </Fade>
+      </Modal>
+
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={open2}
+        onClose={handleClose2}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={open2}>
+          <div className={classes.paperModal}>
+            <h2 id="transition-modal-title" style={{textAlign: "center"}}>Terjadi kesalahan</h2>
+            <p id="transition-modal-description" style={{textAlign: "center"}}>Silakan diulang</p>
+          </div>
+        </Fade>
+      </Modal>
     </Grid>
   );
 }

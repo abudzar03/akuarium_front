@@ -10,27 +10,34 @@ import BarChartIcon from '@material-ui/icons/BarChart';
 import LayersIcon from '@material-ui/icons/Layers';
 import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
 import DirectionsRunIcon from '@material-ui/icons/DirectionsRun';
+import Link from '@material-ui/core/Link';
 
 export const menuList = (
   <div>
-    <ListItem button>
-      <ListItemIcon>
-        <DashboardIcon />
-      </ListItemIcon>
-      <ListItemText primary="Home" primaryTypographyProps={{style:{fontFamily: "raleway"}}} />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <AssignmentTurnedInIcon />
-      </ListItemIcon>
-      <ListItemText primary="Check In" primaryTypographyProps={{style:{fontFamily: "raleway"}}} />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <DirectionsRunIcon />
-      </ListItemIcon>
-      <ListItemText primary="Activity" primaryTypographyProps={{style:{fontFamily: "raleway"}}} />
-    </ListItem>
+    <Link href="/home" underline="none" color="inherit">
+        <ListItem button>
+            <ListItemIcon>
+                <DashboardIcon />
+            </ListItemIcon>
+            <ListItemText primary="Home" primaryTypographyProps={{style:{fontFamily: "raleway"}}} />
+        </ListItem>
+    </Link>
+    <Link href="/checkin" underline="none" color="inherit">
+        <ListItem button>
+            <ListItemIcon>
+                <AssignmentTurnedInIcon />
+            </ListItemIcon>
+            <ListItemText primary="Check In" primaryTypographyProps={{style:{fontFamily: "raleway"}}} />
+        </ListItem>
+    </Link>
+    <Link href="/activity" underline="none" color="inherit">
+        <ListItem button>
+            <ListItemIcon>
+                <DirectionsRunIcon />
+            </ListItemIcon>
+            <ListItemText primary="Activity" primaryTypographyProps={{style:{fontFamily: "raleway"}}} />
+        </ListItem>
+    </Link>
     {/* <ListItem button>
       <ListItemIcon>
         <BarChartIcon />

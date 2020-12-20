@@ -19,7 +19,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
 import { menuList } from './menu';
-import Checkinstatus from './checkinstatus';
+import Activityhead from './activityhead';
 // import Deposits from './Deposits';
 // import Orders from './Orders';
 import Head from 'next/head';
@@ -119,7 +119,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Home() {
+export default function Activity() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
@@ -184,7 +184,7 @@ export default function Home() {
             {/* Checkinstatus */}
             <Grid item xs={12}>
               <Paper className={fixedHeightPaper}>
-                <Checkinstatus />
+                <Activityhead />
               </Paper>
             </Grid>
             {/* Recent Deposits */}
