@@ -10,6 +10,9 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import { useState } from 'react';
 import { useForm } from "react-hook-form";
+import Modal from '@material-ui/core/Modal';
+import Backdrop from '@material-ui/core/Backdrop';
+import Fade from '@material-ui/core/Fade';
 
 function preventDefault(event) {
   event.preventDefault();
@@ -28,6 +31,17 @@ const useStyles = makeStyles((theme) => ({
   form: {
     width: '100%', // Fix IE 11 issue.
     marginTop: theme.spacing(2),
+  },
+  modal: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  paperModal: {
+    backgroundColor: theme.palette.background.paper,
+    border: '2px solid #000',
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
   },
 }));
 
@@ -51,9 +65,17 @@ export default function Activityhead(props) {
     })
     .catch(function (error) {
       console.log(error);
-    //   handleOpen2();
+      handleOpen2();
     });
   } 
+
+  const [open2, setOpen2] = useState(false);
+  const handleOpen2 = () => {
+    setOpen2(true);
+  };
+  const handleClose2 = () => {
+    setOpen2(false);
+  };
 
   return (
     <React.Fragment>
@@ -96,6 +118,25 @@ export default function Activityhead(props) {
             <Grid item xs={false} sm={false} md className={classes.image}>
             </Grid>
         </Grid>
+        <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={open2}
+        onClose={handleClose2}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+            timeout: 500,
+        }}
+        >
+            <Fade in={open2}>
+                <div className={classes.paperModal}>
+                <h2 id="transition-modal-title" style={{textAlign: "center"}}>Terjadi kesalahan</h2>
+                <p id="transition-modal-description" style={{textAlign: "center"}}>Silakan diulang</p>
+                </div>
+            </Fade>
+        </Modal>
     </React.Fragment>
   );
 }

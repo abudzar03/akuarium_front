@@ -69,6 +69,14 @@ export default function Activitylist(props) {
     setOpen(false);
   };
 
+  const [open2, setOpen2] = useState(false);
+  const handleOpen2 = () => {
+    setOpen2(true);
+  };
+  const handleClose2 = () => {
+    setOpen2(false);
+  };
+
   const { register, handleSubmit } = useForm();
   const onSubmit = data => {
     console.log(data);
@@ -84,7 +92,7 @@ export default function Activitylist(props) {
     })
     .catch(function (error) {
       console.log(error);
-    //   handleOpen2();
+      handleOpen2();
     });
   }
 
@@ -105,7 +113,7 @@ export default function Activitylist(props) {
       })
       .catch(function (error) {
         console.log(error);
-      //   handleOpen2();
+        handleOpen2();
       });
   }
 
@@ -207,6 +215,26 @@ export default function Activitylist(props) {
           </div>
         </Fade>
       </Modal>
+
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={open2}
+        onClose={handleClose2}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+            timeout: 500,
+        }}
+        >
+            <Fade in={open2}>
+                <div className={classes.paperModal}>
+                <h2 id="transition-modal-title" style={{textAlign: "center"}}>Terjadi kesalahan</h2>
+                <p id="transition-modal-description" style={{textAlign: "center"}}>Silakan diulang</p>
+                </div>
+            </Fade>
+        </Modal>
     </React.Fragment>
   );
 }
