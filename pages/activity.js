@@ -23,6 +23,9 @@ import Activityhead from './activityhead';
 // import Deposits from './Deposits';
 // import Orders from './Orders';
 import Head from 'next/head';
+import Tooltip from '@material-ui/core/Tooltip';
+import Cookies from 'cookies';
+import Activitylist from './activitylist';
 
 function Copyright() {
   return (
@@ -119,9 +122,20 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Activity() {
+function Activity({ activities }) {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
+
+  const username = typeof window !== 'undefined' ? localStorage.getItem('username') : null
+
+  const userToken = typeof window !== 'undefined' ? localStorage.getItem('userToken') : null
+  // console.log(userToken);
+  const AUTH_TOKEN = 'bearer ' + userToken;
+
+  const axios = require('axios');
+  axios.defaults.baseURL = 'http://localhost:4000';
+  axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
+
+  const [open, setOpen] = React.useState(false);
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -129,6 +143,11 @@ export default function Activity() {
     setOpen(false);
   };
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+
+  const logout = () => {
+    localStorage.removeItem("userToken");
+    window.location.href = '/';
+  }
 
   return (
     <div className={classes.root}>
@@ -151,13 +170,15 @@ export default function Activity() {
             <MenuIcon />
           </IconButton>
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            Selamat Datang di AKUARIUM
+            Selamat Datang {username} di AKUARIUM
           </Typography>
-          <IconButton color="inherit">
-            {/* <Badge badgeContent={4} color="secondary"> */}
-              <MeetingRoomIcon />
-            {/* </Badge> */}
-          </IconButton>
+          <Tooltip title="LOGOUT" aria-label="logout">
+            <IconButton color="inherit" onClick={logout}>
+              {/* <Badge badgeContent={4} color="secondary"> */}
+                <MeetingRoomIcon />
+              {/* </Badge> */}
+            </IconButton>
+          </Tooltip>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -184,15 +205,24 @@ export default function Activity() {
             {/* Checkinstatus */}
             <Grid item xs={12}>
               <Paper className={fixedHeightPaper}>
-                <Activityhead />
+                <Activityhead axios={axios}/>
               </Paper>
             </Grid>
-            {/* Recent Deposits */}
-            {/* <Grid item xs={12} md={4} lg={3}>
-              <Paper className={fixedHeightPaper}>
-                <Deposits />
-              </Paper>
-            </Grid> */}
+            {/* Activity List */}
+            <Grid item xs={12}>
+              
+              {activities.map(({ _id, activity, createdAt }) => (
+                <Activitylist key={_id} id={_id} activity={activity} createdAt={createdAt} axios={axios} />
+                // <Paper>
+                // <li key={_id}>
+                //   {activity}
+                //   <br />
+                //   {createdAt}
+                // </li>
+                // </Paper>
+              ))}
+              
+            </Grid>
             {/* Recent Orders */}
             {/* <Grid item xs={12}>
               <Paper className={classes.paper}>
@@ -208,3 +238,39 @@ export default function Activity() {
     </div>
   );
 }
+
+Activity.getInitialProps = async ({ req, res }) => {
+  // const res = await fetch('https://api.github.com/repos/vercel/next.js')
+  // const json = await res.json()
+  // Create a cookies instance
+  const cookies = new Cookies(req, res)
+  const userToken = cookies.get('userToken')
+  const AUTH_TOKEN = 'bearer ' + userToken;
+  const axios = require('axios');
+  axios.defaults.baseURL = 'http://localhost:4000';
+  axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
+  // const allActivities = () => {
+  //   axios.get('/activity', {
+  //     })
+  //     .then(function (response) {
+  //       console.log(response);
+  //       return response.data;
+  //     //   if (response.data.success) {
+  //     //     handleOpen();
+  //     //   }
+  //     })
+  //     .catch(function (error) {
+  //       console.log(error);
+  //     //   handleOpen2();
+  //     });
+  // }
+  // try {
+  const response = await axios.get('/activity');
+  console.log(response);
+  // } catch (error) {
+  //   console.error(error);
+  // }
+  return { activities: response.data }
+}
+
+export default Activity

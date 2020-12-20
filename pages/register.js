@@ -74,8 +74,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SignInSide() {
+export default function Register() {
   const classes = useStyles();
+
+  const axios = require('axios');
+  axios.defaults.baseURL = 'http://localhost:4000';
 
   const [username, setUsername]  = useState("");
   const [password, setPassword]  = useState("");
@@ -97,8 +100,6 @@ export default function SignInSide() {
     setOpen2(false);
   };
 
-  const axios = require('axios');
-  axios.defaults.baseURL = 'http://localhost:4000';
   const { register, handleSubmit } = useForm();
   const onSubmit = data => {
     console.log(data);

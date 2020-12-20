@@ -20,9 +20,12 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
 import { menuList } from './menu';
 import Checkinstatus from './checkinstatus';
+import Checkindone from './checkindone';
 // import Deposits from './Deposits';
 // import Orders from './Orders';
 import Head from 'next/head';
+import Tooltip from '@material-ui/core/Tooltip';
+import Cookies from 'cookies';
 
 function Copyright() {
   return (
@@ -119,9 +122,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Home() {
+function Home({checkin}) {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
+
+  console.log(checkin[0]);
+
+  const username = typeof window !== 'undefined' ? localStorage.getItem('username') : null
+
+  const [open, setOpen] = React.useState(false);
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -129,6 +137,18 @@ export default function Home() {
     setOpen(false);
   };
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+
+  const logout = () => {
+    localStorage.removeItem("userToken");
+    window.location.href = '/';
+  }
+
+  let checkInView;
+  if (typeof checkin[0] !== 'undefined') {
+    checkInView = <Checkindone checkin={checkin} />;
+  } else {
+    checkInView = <Checkinstatus />;
+  }
 
   return (
     <div className={classes.root}>
@@ -151,13 +171,15 @@ export default function Home() {
             <MenuIcon />
           </IconButton>
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            Selamat Datang di AKUARIUM
+            Selamat Datang {username} di AKUARIUM
           </Typography>
-          <IconButton color="inherit">
-            {/* <Badge badgeContent={4} color="secondary"> */}
-              <MeetingRoomIcon />
-            {/* </Badge> */}
-          </IconButton>
+          <Tooltip title="LOGOUT" aria-label="logout">
+            <IconButton color="inherit" onClick={logout}>
+              {/* <Badge badgeContent={4} color="secondary"> */}
+                <MeetingRoomIcon />
+              {/* </Badge> */}
+            </IconButton>
+          </Tooltip>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -184,7 +206,8 @@ export default function Home() {
             {/* Checkinstatus */}
             <Grid item xs={12}>
               <Paper className={fixedHeightPaper}>
-                <Checkinstatus />
+                {/* <Checkinstatus /> */}
+                {checkInView}
               </Paper>
             </Grid>
             {/* Recent Deposits */}
@@ -208,3 +231,17 @@ export default function Home() {
     </div>
   );
 }
+
+Home.getInitialProps = async ({ req, res }) => {
+  const cookies = new Cookies(req, res)
+  const userToken = cookies.get('userToken')
+  const AUTH_TOKEN = 'bearer ' + userToken;
+  const axios = require('axios');
+  axios.defaults.baseURL = 'http://localhost:4000';
+  axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
+  const response = await axios.get('/checkin');
+  console.log(response);
+  return { checkin: response.data }
+}
+
+export default Home

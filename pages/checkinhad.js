@@ -35,27 +35,27 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Checkinaction(props) {
+export default function Checkinhad(props) {
   const classes = useStyles();
 
   // console.log(props.axios);
   
-  const { register, handleSubmit } = useForm();
-  const onSubmit = data => {
-    console.log(data);
-    props.axios.post('/checkin', {
-    })
-    .then(function (response) {
-      console.log(response);
-      // if (response.data.success) {
-      //   handleOpen();
-      // }
-    })
-    .catch(function (error) {
-      console.log(error);
-      // handleOpen2();
-    });
-  }
+//   const { register, handleSubmit } = useForm();
+//   const onSubmit = data => {
+//     console.log(data);
+//     props.axios.post('/checkin', {
+//     })
+//     .then(function (response) {
+//       console.log(response);
+//       // if (response.data.success) {
+//       //   handleOpen();
+//       // }
+//     })
+//     .catch(function (error) {
+//       console.log(error);
+//       // handleOpen2();
+//     });
+//   }
 
   return (
     <React.Fragment>
@@ -63,13 +63,13 @@ export default function Checkinaction(props) {
             <Grid item xs={12} sm={12} md>
                 {/* <Title>Recent Deposits</Title> */}
                 <Typography component="p" variant="h5" style={{fontFamily: "raleway"}}>
-                    Klik tombol di bawah untuk Check In
-                    {/* Terima kasih sudah Check In pada */}
+                    {/* Klik tombol di bawah untuk Check In */}
+                    Terima kasih sudah Check In pada
                 </Typography>
                 <Typography color="textSecondary" className={classes.depositContext}>
-                    {/* on 15 March, 2019 */}
+                    {props.checkin.createdAt}
                 </Typography>
-                <form className={classes.form} onSubmit={handleSubmit(onSubmit)}>
+                {/* <form className={classes.form} onSubmit={handleSubmit(onSubmit)}>
                 <Button
                     type="submit"
                     variant="contained"
@@ -79,9 +79,9 @@ export default function Checkinaction(props) {
                     GAS CHECK IN!
                     </Button>
                 </form>
-                
+                 */}
             </Grid>
-            <Grid item xs={false} sm={false} md className={classes.image}>
+            <Grid item xs={false} sm={false} md className={classes.image2}>
             </Grid>
         </Grid>
     </React.Fragment>
